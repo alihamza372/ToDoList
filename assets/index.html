@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f8f8;
+        }
+
+        .todo-container {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .task {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .checkbox {
+            margin-right: 10px;
+        }
+
+        .delete-btn {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .e-btn {
+              background: #FFFFFF;
+              border: 0;
+              border-radius: .5rem;
+              box-sizing: border-box;
+              color: #111827;
+              font: 700 16px/24px Inter, Helvetica, sans-serif;
+              line-height: 1.25rem;
+              padding: .75rem 1rem;
+              text-align: center;
+              text-decoration: none solid #D1D5DB;
+              box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+              cursor: pointer;
+              user-select: none;
+              touch-action: manipulation;
+            }
+
+        .e-btn:hover {
+              background: rgb(249, 250, 251);
+            }
+
+            .e-btn:focus {
+              outline: 2px solid transparent;
+              outline-offset: 2px;
+            }
+
+            .e-btn:focus-visible {
+              box-shadow: none;
+            }
+
+    </style>
+</head>
+<body>
+    <div class="todo-container">
+        <h1>To-Do List</h1>
+
+        <form action="{{ url_for('add') }}" method="post">
+            <input type="text" name="todo" style="width:500px; border-radius: 25px; padding: 10px;" placeholder="Add a new task">
+            <button type="submit" style="
+          background: #5E5DF0;
+          border-radius: 999px;
+          box-shadow: 0 10px 20px -10px #5E5DF0;
+          color: #FFFFFF;
+          cursor: pointer;
+          font: 700 16px/24px Inter, Helvetica, sans-serif;
+          padding: 8px 18px;
+          width: fit-content;
+          border: 0;">Add</button>
+        </form>
+
+        {% if todolist %}
+            <ul>
+                {% for todo in todolist %}
+                    <li>
+                        <input type="checkbox" name="done" class="checkbox" {% if todo['done'] %} checked {% endif %} onchange="this.form.submit()">
+                        <span class="task"{% if todo['done'] %} style="text-decoration: line-through"{% endif %}>{{ todo['task'] }}</span>
+                        <a href="{{ url_for('check', index=loop.index0) }}"class="e-btn">Mark as Done</a>
+                        <a href="{{ url_for('edit', index=loop.index0) }}"class="e-btn">Edit</a>
+                        <a href="{{ url_for('delete', index=loop.index0) }}" class="delete-btn">&#10060;</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tasks to display.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
